@@ -18,14 +18,7 @@ class BasicInfo(BaseModel):
     digit_sum: int
     fun_fact: str
 
-number_info = {
-    "number": 0,
-    "is_prime": True,
-    "is_perfect": True,
-    "properties": [],
-    "digit_sum": 0,
-    "fun_fact": ""
-}
+number_info = {}
 
 @app.get("/api/classify-number")
 async def classify_number(number = Query(..., description="A number.")):
@@ -34,7 +27,7 @@ async def classify_number(number = Query(..., description="A number.")):
     """
     try:
         number = int(number)
-        url = f'http://numbersapi.com/{number}/math'
+        url = f'http://numbersapi.com/{abs(number)}/math'
 
         number_info["number"] = number
         number_info["is_prime"] = is_prime(number)
@@ -50,6 +43,6 @@ async def classify_number(number = Query(..., description="A number.")):
 
     except ValueError:
         return {
-            "number": "alphabet",
+            "number": number,
             "error": True
         }
